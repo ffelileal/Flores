@@ -1,0 +1,232 @@
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #faf7f2 0%, #f5f0e8 50%, #f0e6d6 100%);
+            font-family: 'Dancing Script', cursive;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .letter-container {
+            position: relative;
+            max-width: 500px;
+            width: 100%;
+            margin-bottom: 40px;
+            transform: rotate(-1deg);
+            transition: transform 0.3s ease;
+        }
+
+        .letter-container:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        .letter {
+            background: linear-gradient(145deg, #fefcf8 0%, #f8f4ed 100%);
+            border-radius: 15px;
+            padding: 40px 35px;
+            box-shadow: 
+                0 8px 32px rgba(139, 115, 85, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8),
+                0 1px 3px rgba(139, 115, 85, 0.1);
+            border: 1px solid rgba(218, 195, 162, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .letter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(218, 195, 162, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(218, 195, 162, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .letter-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .letter-text {
+            font-size: 24px;
+            color: #8b7355;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-weight: 400;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .signature {
+            font-family: 'Great Vibes', cursive;
+            font-size: 28px;
+            color: #a0845c;
+            margin-top: 15px;
+            text-align: right;
+        }
+
+        .reveal-button {
+            background: linear-gradient(145deg, #d4af37 0%, #b8941f 100%);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 20px;
+            font-family: 'Dancing Script', cursive;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 
+                0 6px 20px rgba(212, 175, 55, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reveal-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .reveal-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 8px 25px rgba(212, 175, 55, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .reveal-button:hover::before {
+            left: 100%;
+        }
+
+        .reveal-button:active {
+            transform: translateY(0);
+        }
+
+        .flower-surprise {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            z-index: 1000;
+            text-align: center;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            pointer-events: none;
+        }
+
+        .flower-surprise.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .flower {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            animation: gentle-sway 3s ease-in-out infinite;
+            filter: drop-shadow(0 4px 8px rgba(255, 193, 7, 0.3));
+        }
+        
+        .flower svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .surprise-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 36px;
+            color: #8b7355;
+            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+        }
+
+        .close-button {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #d4af37;
+            color: #8b7355;
+            padding: 12px 25px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-button:hover {
+            background: #d4af37;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(245, 240, 232, 0.95);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            z-index: 999;
+        }
+
+        .overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @keyframes gentle-sway {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        @media (max-width: 768px) {
+            .letter {
+                padding: 30px 25px;
+            }
+            
+            .letter-text {
+                font-size: 20px;
+            }
+            
+            .signature {
+                font-size: 24px;
+            }
+            
+            .reveal-button {
+                padding: 15px 35px;
+                font-size: 18px;
+            }
+            
+            .flower {
+                font-size: 80px;
+            }
+            
+            .surprise-text {
+                font-size: 28px;
+            }
+        }
