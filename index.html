@@ -3,36 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>21 Septiembre</title>
+    <title>Flor para otra flor</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="styles.css">
 
 </head>
 <body>
-    <div class="letter-container">
-        <div class="letter">
-            <div class="letter-content">
-                <div class="letter-text">
-                    En esta primavera<br>
-                    Aunque no pueda darte flores de verdad, no quiero que te falten.<br>
-                    Por eso te regalo estas flores amarillas:
-
+    <div class="container">
+        <div class="envelope-container">
+            <div class="envelope" id="envelope">
+                <div class="envelope-back"></div>
+                <div class="envelope-flap"></div>
+                <div class="letter-content">
+                    <div class="typewriter-text" id="typewriter"></div>
                 </div>
-                <div class="signature">Con amor Feli</div>
             </div>
         </div>
+        
+        <div class="pull-instruction" id="pullInstruction">
+            <div class="pull-text">Tira hacia arriba ↑</div>
+            <div class="pull-hint">Deslice para revelar la sorpresa</div>
+        </div>
+        
+        <div class="dedication" id="dedication">
+            De Feli para vos
+        </div>
     </div>
+    
+    <div class="flowers-container" id="flowersContainer"></div>
 
-    <button class="reveal-button" onclick="showSurprise()">
-        Descubre tu sorpresa
-    </button>
-
-    <div class="overlay" id="overlay"></div>
-    <div class="flower-surprise" id="flowerSurprise">
-        <div class="flower" id="randomFlower"></div>
-        <div class="surprise-text">De Feli para vos</div>
-        <button class="close-button" onclick="hideSurprise()">Cerrar</button>
-    </div>
         <script src="script.js"></script>
 
 </body>
