@@ -50,25 +50,25 @@
                 type: 'yellow' 
             },
             { 
-                center: '#DE9F1B', 
-                middle: '#DECE1B', 
-                outer: '#DE841B',
+                center: '#FFA07A', 
+                middle: '#FF6347', 
+                outer: '#FF4500',
                 stem: '#228B22',
                 leaf: '#90EE90',
                 type: 'orange' 
             },
             { 
-                center: '#DE6F1B', 
-                middle: '#DE8F1B', 
-                outer: '#DE4C1B',
+                center: '#FFB6C1', 
+                middle: '#FF69B4', 
+                outer: '#FF1493',
                 stem: '#228B22',
                 leaf: '#98FB98',
                 type: 'pink' 
             },
             { 
-                center: '#D8A60F', 
-                middle: '#B68C0D', 
-                outer: '#E0AC10',
+                center: '#FFFFE0', 
+                middle: '#F0E68C', 
+                outer: '#DAA520',
                 stem: '#228B22',
                 leaf: '#ADFF2F',
                 type: 'light-yellow' 
@@ -307,16 +307,68 @@
             return flower;
         }
         
+        // Check if position overlaps with existing flowers
+        function isPositionValid(x, y, existingPositions, minDistance = 100) {
+            for (let pos of existingPositions) {
+                const distance = Math.sqrt(Math.pow(x - pos.x, 2) + Math.pow(y - pos.y, 2));
+                if (distance < minDistance) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        // Generate random position that doesn't overlap
+        function getValidPosition(existingPositions, attempts = 50) {
+            for (let i = 0; i < attempts; i++) {
+                const x = Math.random() * (window.innerWidth - 120);
+                const y = Math.random() * 350 + 50; // Increased height range from 250 to 350
+                
+                // Check if position overlaps with text area (center of screen)
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                const textAreaWidth = 450; // Envelope + dedication area
+                const textAreaHeight = 400; // Envelope + dedication area
+                
+                const isInTextArea = (
+                    x > centerX - textAreaWidth/2 && 
+                    x < centerX + textAreaWidth/2 - 120 && 
+                    y > 50 && 
+                    y < 300
+                );
+                
+                if (!isInTextArea && isPositionValid(x, y, existingPositions, 80)) { // Reduced min distance from 100 to 80
+                    return { x, y };
+                }
+            }
+            // If no valid position found, return a random one outside text area (fallback)
+            const side = Math.random() > 0.5 ? 'left' : 'right';
+            const centerX = window.innerWidth / 2;
+            
+            if (side === 'left') {
+                return {
+                    x: Math.random() * (centerX - 250),
+                    y: Math.random() * 350 + 50
+                };
+            } else {
+                return {
+                    x: centerX + 250 + Math.random() * (window.innerWidth - centerX - 370),
+                    y: Math.random() * 350 + 50
+                };
+            }
+        }
+        
         function generateFlowers() {
             const container = document.getElementById('flowersContainer');
-            const numFlowers = 10 + Math.floor(Math.random() * 6);
+            const numFlowers = 20 + Math.floor(Math.random() * 10); // Increased from 10-16 to 20-30
+            const flowerPositions = [];
             
             for (let i = 0; i < numFlowers; i++) {
                 setTimeout(() => {
-                    const x = Math.random() * (window.innerWidth - 120);
-                    const y = Math.random() * 250 + 80;
+                    const position = getValidPosition(flowerPositions);
+                    flowerPositions.push(position);
                     
-                    const flower = createFlower(x, y);
+                    const flower = createFlower(position.x, position.y);
                     container.appendChild(flower);
                     flowersGenerated.push(flower);
                     
@@ -326,7 +378,7 @@
                             document.getElementById('dedication').classList.add('show');
                         }, 1500);
                     }
-                }, i * 400);
+                }, i * 200); // Reduced delay from 400ms to 200ms for faster appearance
             }
         }
         
@@ -369,6 +421,114 @@
             
             document.body.appendChild(svg);
             hasFloatingPetal = true;
+        }
+        
+        function createButterfly() {
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', '40');
+            svg.setAttribute('height', '30');
+            svg.setAttribute('viewBox', '0 0 40 30');
+            svg.style.position = 'fixed';
+            svg.style.zIndex = '1001';
+            svg.style.animation = 'butterflyFly 15s ease-in-out infinite';
+            
+            // Create butterfly gradients
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            const wingGrad = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient');
+            wingGrad.setAttribute('id', 'butterflyWing');
+            
+            const wingStop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            wingStop1.setAttribute('offset', '0%');
+            wingStop1.setAttribute('stop-color', '#FF69B4');
+            
+            const wingStop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            wingStop2.setAttribute('offset', '70%');
+            wingStop2.setAttribute('stop-color', '#FF1493');
+            
+            const wingStop3 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            wingStop3.setAttribute('offset', '100%');
+            wingStop3.setAttribute('stop-color', '#8B008B');
+            
+            wingGrad.appendChild(wingStop1);
+            wingGrad.appendChild(wingStop2);
+            wingGrad.appendChild(wingStop3);
+            defs.appendChild(wingGrad);
+            svg.appendChild(defs);
+            
+            // Left wing
+            const leftWing = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+            leftWing.setAttribute('cx', '12');
+            leftWing.setAttribute('cy', '10');
+            leftWing.setAttribute('rx', '8');
+            leftWing.setAttribute('ry', '6');
+            leftWing.setAttribute('fill', 'url(#butterflyWing)');
+            leftWing.setAttribute('transform', 'rotate(-20 12 10)');
+            svg.appendChild(leftWing);
+            
+            // Right wing
+            const rightWing = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+            rightWing.setAttribute('cx', '28');
+            rightWing.setAttribute('cy', '10');
+            rightWing.setAttribute('rx', '8');
+            rightWing.setAttribute('ry', '6');
+            rightWing.setAttribute('fill', 'url(#butterflyWing)');
+            rightWing.setAttribute('transform', 'rotate(20 28 10)');
+            svg.appendChild(rightWing);
+            
+            // Body
+            const body = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+            body.setAttribute('cx', '20');
+            body.setAttribute('cy', '15');
+            body.setAttribute('rx', '1.5');
+            body.setAttribute('ry', '8');
+            body.setAttribute('fill', '#8B4513');
+            svg.appendChild(body);
+            
+            // Antennae
+            const antenna1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            antenna1.setAttribute('x1', '18');
+            antenna1.setAttribute('y1', '8');
+            antenna1.setAttribute('x2', '16');
+            antenna1.setAttribute('y2', '5');
+            antenna1.setAttribute('stroke', '#8B4513');
+            antenna1.setAttribute('stroke-width', '1');
+            svg.appendChild(antenna1);
+            
+            const antenna2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            antenna2.setAttribute('x1', '22');
+            antenna2.setAttribute('y1', '8');
+            antenna2.setAttribute('x2', '24');
+            antenna2.setAttribute('y2', '5');
+            antenna2.setAttribute('stroke', '#8B4513');
+            antenna2.setAttribute('stroke-width', '1');
+            svg.appendChild(antenna2);
+            
+            svg.style.top = Math.random() * 200 + 100 + 'px';
+            svg.style.left = '-50px';
+            
+            return svg;
+        }
+        
+        function createSparkles() {
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.innerHTML = '✨';
+                    sparkle.style.position = 'fixed';
+                    sparkle.style.fontSize = '20px';
+                    sparkle.style.zIndex = '1002';
+                    sparkle.style.pointerEvents = 'none';
+                    sparkle.style.animation = 'sparkleFloat 4s ease-out forwards';
+                    sparkle.style.top = Math.random() * window.innerHeight + 'px';
+                    sparkle.style.left = Math.random() * window.innerWidth + 'px';
+                    
+                    document.body.appendChild(sparkle);
+                    
+                    setTimeout(() => {
+                        sparkle.remove();
+                    }, 4000);
+                }, i * 500);
+            }
         }
         
         // Pull instruction handler
@@ -462,6 +622,21 @@
                 generateFlowers();
                 pullInstruction.style.display = 'none';
             }, 1500);
+            
+            // Create sparkles when flowers start appearing
+            setTimeout(() => {
+                createSparkles();
+            }, 2000);
+            
+            // Create butterfly flying across
+            setTimeout(() => {
+                const butterfly = createButterfly();
+                document.body.appendChild(butterfly);
+                
+                setTimeout(() => {
+                    butterfly.remove();
+                }, 15000);
+            }, 4000);
             
             // Auto-close envelope after flowers appear
             setTimeout(() => {
